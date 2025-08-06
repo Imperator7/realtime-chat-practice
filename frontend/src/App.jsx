@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
+import { io } from 'socket.io-client'
 import './App.css'
+
+const socket = io('http://localhost:5000/')
 
 function App() {
   const [messages, setMessages] = useState([
@@ -18,6 +21,16 @@ function App() {
     setMessages((prev) => [...prev, { type: 'sent', content: message }])
     setTypingMessage('')
   }
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('Connected to server as:', socket.id)
+    })
+
+    return () => {
+      socket.off('connect')
+    }
+  }, [])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
