@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -9,14 +9,19 @@ function App() {
   ])
 
   const [typingMessage, setTypingMessage] = useState('')
+  const bottomRef = useRef(null)
 
   const sendMessage = (message, e) => {
     e.preventDefault()
 
-    if (message === '') return
+    if (message.trim() === '') return
     setMessages((prev) => [...prev, { type: 'sent', content: message }])
     setTypingMessage('')
   }
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   return (
     <main>
@@ -27,22 +32,27 @@ function App() {
             message.type === 'received' ? (
               <li
                 key={index}
-                className="bg-blue-300 text-white rounded-lg p-2 m-1 w-fit text-overflow"
+                className="bg-blue-300 text-white rounded-lg p-2 m-1 w-fit max-w-[70%] break-words"
               >
                 {message.content}
               </li>
             ) : (
               <li
                 key={index}
-                className="bg-blue-400 rounded-lg p-2 m-1 w-fit self-end text-overflow"
+                className="bg-blue-400 rounded-lg p-2 m-1 w-fit self-end max-w-[70%] break-words"
               >
                 {message.content}
               </li>
             )
           )}
+          <div ref={bottomRef}></div>
         </ul>
 
-        <form action="send-message" className="flex items-baseline">
+        <form
+          action="send-message"
+          onSubmit={(e) => sendMessage(typingMessage, e)}
+          className="flex items-baseline"
+        >
           <input
             className="mt-2 rounded border border-gray-300 px-1 py-0.5 w-full focus:outline-none"
             type="text"
@@ -51,8 +61,8 @@ function App() {
             onChange={(e) => setTypingMessage(e.target.value)}
           />
           <button
+            type="submit"
             className="bg-green-500 text-white rounded py-1 px-3 mx-1 hover:bg-green-600 active:scale-95 active:translate-y-0.5 duration-50 "
-            onClick={(e) => sendMessage(typingMessage, e)}
           >
             Send
           </button>
