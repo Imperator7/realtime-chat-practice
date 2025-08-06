@@ -16,9 +16,11 @@ app.get('/', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-  socket.on('send-message', (msg) => {
-    console.log('message: ' + msg)
+  socket.on('send-message', (sentMessage) => {
+    console.log('message: ' + sentMessage)
+    io.emit('receive-message', sentMessage)
   })
+
   console.log('a user connected', socket.id)
 })
 
