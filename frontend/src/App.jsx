@@ -18,6 +18,7 @@ function App() {
     e.preventDefault()
 
     if (message.trim() === '') return
+    socket.emit('send-message', message)
     setMessages((prev) => [...prev, { type: 'sent', content: message }])
     setTypingMessage('')
   }
