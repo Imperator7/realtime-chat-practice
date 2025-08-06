@@ -28,10 +28,18 @@ function App() {
       console.log('Connected to server as:', socket.id)
     })
 
+    socket.on('receive-message', (receiveMessage) => {
+      setMessages((prev) => [
+        ...prev,
+        { type: 'received', content: receiveMessage },
+      ])
+    })
+
     return () => {
       socket.off('connect')
+      socket.off('receive-message')
     }
-  }, [])
+  })
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
