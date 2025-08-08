@@ -1,46 +1,16 @@
-import { useState, useEffect } from 'react'
-import { io } from 'socket.io-client'
 import MessageList from '../components/MessageList'
 import MessageInput from '../components/MessageInput'
 import '../styles/ChatPage.css'
-
-const socket = io('http://localhost:5000')
+import { useChat } from '../customHooks/useChat'
 
 function ChatPage() {
-  const [messages, setMessages] = useState([
-    { type: 'received', content: 'Hi!' },
-    { type: 'sent', content: 'Hi there!' },
-    { type: 'sent', content: 'Wassup? wat du u do broo' },
-  ])
-
-  const [typingMessage, setTypingMessage] = useState('')
-
-  const sendMessage = (message, e) => {
-    e.preventDefault()
-
-    if (message.trim() === '') return
-    socket.emit('send-message', message)
-    setMessages((prev) => [...prev, { type: 'sent', content: message }])
-    setTypingMessage('')
-  }
-
-  useEffect(() => {
-    socket.on('connect', () => {
-      console.log('Connected to server as:', socket.id)
-    })
-
-    socket.on('receive-message', (receiveMessage) => {
-      setMessages((prev) => [
-        ...prev,
-        { type: 'received', content: receiveMessage },
-      ])
-    })
-
-    return () => {
-      socket.off('connect')
-      socket.off('receive-message')
-    }
-  })
+  const {
+    messages,
+    isConnected,
+    sendMessage,
+    typingMessage,
+    setTypingMessage,
+  } = useChat()
 
   return (
     <>
