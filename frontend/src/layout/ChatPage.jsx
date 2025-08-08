@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { io } from 'socket.io-client'
-import MessageList from './MessageList'
-import MessageInput from './MessageInput'
+import MessageList from '../components/MessageList'
+import MessageInput from '../components/MessageInput'
 import '../styles/ChatPage.css'
 
 const socket = io('http://localhost:5000')

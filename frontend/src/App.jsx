@@ -1,4 +1,4 @@
-import ChatPage from './pages/ChatPage'
+import ChatPage from './layout/ChatPage'
 import './App.css'
 
 function App() {
