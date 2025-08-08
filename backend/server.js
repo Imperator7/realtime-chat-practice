@@ -21,7 +21,11 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('receive-message', sentMessage)
   })
 
-  console.log('a user connected', socket.id)
+  console.log('Client connected:', socket.id)
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected: ', socket.id)
+  })
 })
 
 server.listen(port, () => {
