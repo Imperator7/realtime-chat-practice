@@ -11,8 +11,17 @@ const io = new Server(server, {
 
 const port = 5000
 
+let onlineUsers = []
+
 app.get('/', (req, res) => {
   res.send('hello world')
+})
+
+app.get('/users', (req, res) => {
+  res.json({
+    status: 200,
+    onlineUsers,
+  })
 })
 
 io.on('connection', (socket) => {
@@ -21,9 +30,11 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('receive-message', sentMessage)
   })
 
+  onlineUsers.push(socket.id)
   console.log('Client connected:', socket.id)
 
   socket.on('disconnect', () => {
+    onlineUsers = onlineUsers.filter((socketId) => socketId != socket.id)
     console.log('Client disconnected: ', socket.id)
   })
 })
