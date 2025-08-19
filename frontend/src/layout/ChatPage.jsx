@@ -1,4 +1,4 @@
-import MessageList from '../components/MessageList'
+import MessageList from '../components/MessageBox'
 import MessageInput from '../components/MessageInput'
 import '../styles/ChatPage.css'
 import { useChat } from '../customHooks/useChat'
